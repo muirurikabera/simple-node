@@ -3,10 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Simple Node App</title>
+    <title>Blog Posts</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script>
+        async function fetchPosts() {
+            const response = await fetch('/api/posts');
+            const posts = await response.json();
+            const tableBody = document.getElementById('posts-table-body');
+
+            posts.forEach(post => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="border px-4 py-2">${post.id}</td>
+                    <td class="border px-4 py-2">${post.title}</td>
+                    <td class="border px-4 py-2">${post.body}</td>
+                    <td class="border px-4 py-2">${new Date(post.date_created).toLocaleString()}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        window.onload = fetchPosts;
+    </script>
 </head>
-<body>
-    <h1>Welcome to My Simple Node.js App!</h1>
-    <p>This is a simple HTML page served by Express.</p>
+<body class="bg-gray-100">
+    <div class="container mx-auto mt-10">
+        <h1 class="text-2xl font-bold mb-4">Blog Posts</h1>
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead>
+                <tr>
+                    <th class="border px-4 py-2">ID</th>
+                    <th class="border px-4 py-2">Title</th>
+                    <th class="border px-4 py-2">Body</th>
+                    <th class="border px-4 py-2">Date Created</th>
+                </tr>
+            </thead>
+            <tbody id="posts-table-body">
+                <!-- Blog posts will be inserted here -->
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
