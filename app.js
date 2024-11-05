@@ -26,11 +26,13 @@ app.get('/', (req, res) => {
 app.get('/api/posts', (req, res) => {
     db.query('SELECT * FROM blog_posts ORDER BY date_created DESC', (err, results) => {
         if (err) {
-            return res.status(500).json({ error: 'Database query failed' });
+            console.error("Database error:", err);  // Log the error to the console
+            return res.status(500).json({ error: 'Database query failed', details: err.message });
         }
         res.json(results);
     });
 });
+
 
 // Start the server
 app.listen(PORT, () => {
